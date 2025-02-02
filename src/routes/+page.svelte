@@ -1,57 +1,103 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 
-	interface Pane {
-		colspanWrapper: string;
-		colspan: string;
-		gridspan: string;
-		hidden: string;
-		next: any;
-		split: string;
-		name: string;
-        bg: string;
+	interface node {
+		id: string;
+		next: node | any;        
+        split: string;
 	}
 
-	function getRootPane(): any {
-		let pane = $state({
-			name: 'root',
-			colspanWrapper: 'col-span-2',
-			span: 'col-span-2',
-			gridspan: 'grid-cols-2',
-			hidden: '',
-            bg: 'bg-red-50'
-		});
-		return pane;
+	interface rootNode {
+		left: node;
+		right: node;
 	}
 
-	let rootPane: any = $state();
+    function add(n: node): any[] {
+        if (n.next === undefined){
+            return [n.id]
+
+        }else {
+            let g = add(n.next)
+            let row = g.length
+            let col = 1;
+            if (Array.isArray(g[0])){
+                col = g[0].length
+            }
+
+            let ng = []
+
+            if(n.split === 'v'){
+
+            }
+
+            if(n.split === 'h'){
+                
+            }
+
+            for(let i = 0; i < row; i++ ){
+                let r = []
+                for(let i = 0; i < col; i++ ){
+                    r.push(n.id)
+                }
+                ng.push(r)
+            }
+            return ng
+        }
+    }
 	onMount(() => {
-		rootPane = getRootPane();
-		let p = $state({
-			colspanWrapper: 'col-span-1',
-			colspan: 'col-span-2',
-			gridspan: 'grid-cols-2',
-			hidden: '',
-            bg: 'bg-red-200',
-            name:'pane1'
-		});
-        rootPane.next = p
+		let root: {
+			id: 'root';
+			left: {
+				id: '1';
+				split: 'v';
+				next: {
+					id: '4';
+				};
+			};
+			right: {
+				id: '2';
+                split: 'h'
+                next: {
+                    id: '3'
+                    split: 'v'
+                    next: {
+                        id: 5
+                    }
+                }
+			};
+		};
 	});
+
+    
 </script>
 
-{#snippet pane(pane1: Pane)}
-	{#if pane1}
-		<div class=" h-[100%] w-[100%] {pane1.colspanWrapper}">
-			<div class="grid h-[100%] w-[100%] {pane1.gridspan}">
-				<div class="{pane1.bg} {pane1.colspan} {pane1.hidden} ">{pane1.name}</div>
-				{@render pane(pane1.next)}
-			</div>
-		</div>
-	{/if}
-{/snippet}
-
 <div class="flex h-[100vh] w-full">
-	{#if rootPane}
-		{@render pane(rootPane)}
-	{/if}
+	<div class="wrapper w-full">
+		<div style="grid-area: one;" class="header w-full items-center bg-red-50 text-center">
+			<div class="flex h-full items-center justify-center">1</div>
+		</div>
+		<div style="grid-area: two;" class="header w-full items-center bg-red-200 text-center">
+			<div class="flex h-full items-center justify-center">2</div>
+		</div>
+		<div style="grid-area: three;" class="header w-full items-center bg-red-400 text-center">
+			<div class="flex h-full items-center justify-center">3</div>
+		</div>
+		<div style="grid-area: four;" class="header w-full items-center bg-red-600 text-center">
+			<div class="flex h-full items-center justify-center">4</div>
+		</div>
+		<div style="grid-area: five;" class="header w-full items-center bg-red-800 text-center">
+			<div class="flex h-full items-center justify-center">5</div>
+		</div>
+	</div>
 </div>
+
+<style>
+	.wrapper {
+		display: grid;
+		grid-template-columns: repeat(3, 2);
+		grid-template-areas:
+			'one  three'
+			'five three'
+			'two  four';
+	}
+</style>
