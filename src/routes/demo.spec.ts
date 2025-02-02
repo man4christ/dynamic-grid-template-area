@@ -59,32 +59,48 @@ function add2(l, r, split) {
       }
       com.push(row)
     }
+
   }
 
   if (split === 'h') {
 
+    let lRepeatRows = []
     let lrepeat = rc / lc;
     for (let i = 0; i < ll; i++) {
       let repeatRow = []
-      for (let j = 0; j < lc; j++) {
-        for (let k = 0; k < lrepeat; k++) {
+      for (let k = 0; k < lrepeat; k++) {
+        for (let j = 0; j < lc; j++) {
           repeatRow.push(l[i][j])
         }
-        com.push(repeatRow)
       }
+      lRepeatRows.push(repeatRow)
     }
 
+    let rRepeatRows = []
     let rrepeat = lc / rc;
     for (let i = 0; i < rl; i++) {
       let repeatRow = []
-      for (let j = 0; j < rc; j++) {
-        for (let k = 0; k < rrepeat; k++) {
+      for (let k = 0; k < rrepeat; k++) {
+        for (let j = 0; j < rc; j++) {
           repeatRow.push(r[i][j])
         }
-        com.push(repeatRow)
       }
+      rRepeatRows.push(repeatRow)
     }
+
+
+
+
+      for (let j = 0; j < lRepeatRows.length; j++) {
+        com.push(lRepeatRows[j])
+      }
+      for (let j = 0; j < rRepeatRows.length; j++) {
+        com.push(rRepeatRows[j])
+      }
   }
+
+
+
 
   return com;
 }
@@ -96,7 +112,6 @@ function add(n: node) {
     let lg = add(n.left)
     let rg = add(n.right)
     let l = add2(lg, rg, n.split);
-    console.log(l)
     return l
   }
 }
@@ -138,7 +153,14 @@ describe('suite name', () => {
       },
     }
 
-    add(root)
+    let l = add(root)
+    for (let i = 0; i < l.length; i++) {
+      let s = ''
+      for (let j = 0; j < l[i].length; j++) {
+        s += `${l[i][j]} `
+      }
+      console.log(s)
+    }
   })
 
 })
