@@ -37,6 +37,12 @@ function add(n: node): any[] {
     }
 
     if (n.split === 'h') {
+      for (let i = 0; i < row; i++) {
+        com.push(ng[i])
+      }
+      for (let i = 0; i < row; i++) {
+        com.push(g[i])
+      }
     }
 
     return com;
@@ -67,7 +73,8 @@ describe('suite name', () => {
       },
     }
 
-      console.log(add(root.right))
+    console.log(add(root.right))
+    console.log(add(root.left))
   })
 
 })
