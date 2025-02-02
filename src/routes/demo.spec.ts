@@ -24,8 +24,40 @@ function add2(l, r, split) {
 
   let com = [];
   if (split === 'v') {
+    let lrepeat = rl / ll;
+    let lRepeatRow = []
     for (let i = 0; i < ll; i++) {
-      com.push(l[i].concat(r[i]));
+      for (let k = 0; k < lrepeat; k++) {
+        let repeatCol = []
+        for (let j = 0; j < lc; j++) {
+          repeatCol.push(l[i][j])
+        }
+        lRepeatRow.push(repeatCol)
+      }
+    }
+
+    let rRepeatRow = []
+    let rrepeat = ll / rl;
+    for (let i = 0; i < rl; i++) {
+      for (let k = 0; k < rrepeat; k++) {
+        let repeatCol = []
+        for (let j = 0; j < rc; j++) {
+          repeatCol.push(r[i][j])
+        }
+        rRepeatRow.push(repeatCol)
+      }
+    }
+
+
+    for (let i = 0; i < rRepeatRow.length; i++) {
+      let row = []
+      for (let j = 0; j < lRepeatRow[0].length; j++) {
+        row.push(lRepeatRow[i][j])
+      }
+      for (let j = 0; j < rRepeatRow[0].length; j++) {
+        row.push(rRepeatRow[i][j])
+      }
+      com.push(row)
     }
   }
 
@@ -41,8 +73,16 @@ function add2(l, r, split) {
         com.push(repeatRow)
       }
     }
+
+    let rrepeat = lc / rc;
     for (let i = 0; i < rl; i++) {
-      com.push(r[i])
+      let repeatRow = []
+      for (let j = 0; j < rc; j++) {
+        for (let k = 0; k < rrepeat; k++) {
+          repeatRow.push(r[i][j])
+        }
+        com.push(repeatRow)
+      }
     }
   }
 
@@ -72,9 +112,14 @@ describe('suite name', () => {
           id: '1',
         },
         right: {
-          id: 4
+          split: 'h',
+          left: {
+            id: '4'
+          },
+          right: {
+            id: '6'
+          }
         },
-
       },
       right: {
         split: 'h',
@@ -92,6 +137,7 @@ describe('suite name', () => {
         },
       },
     }
+
     add(root)
   })
 
