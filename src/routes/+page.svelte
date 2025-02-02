@@ -3,8 +3,8 @@
 
 	interface node {
 		id: string;
-		next: node | any;        
-        split: string;
+		next: node | any;
+		split: string;
 	}
 
 	interface rootNode {
@@ -12,38 +12,36 @@
 		right: node;
 	}
 
-    function add(n: node): any[] {
-        if (n.next === undefined){
-            return [n.id]
+	function add(n: node): any[] {
+		if (n.next === undefined) {
+			return [[n.id]];
+		} else {
+			let g = add(n.next);
+			let row = g.length;
+			let col = g[0].length;
+			let ng = [];
 
-        }else {
-            let g = add(n.next)
-            let row = g.length
-            let col = 1;
-            if (Array.isArray(g[0])){
-                col = g[0].length
-            }
+			for (let i = 0; i < row; i++) {
+				let r = [];
+				for (let i = 0; i < col; i++) {
+					r.push(n.id);
+				}
+				ng.push(r);
+			}
 
-            let ng = []
+			let com = [];
+			if (n.split === 'v') {
+				for (let i = 0; i < row; i++) {
+					com.push(ng.concat(ng[i], g[i]));
+				}
+			}
 
-            if(n.split === 'v'){
+			if (n.split === 'h') {
+			}
 
-            }
-
-            if(n.split === 'h'){
-                
-            }
-
-            for(let i = 0; i < row; i++ ){
-                let r = []
-                for(let i = 0; i < col; i++ ){
-                    r.push(n.id)
-                }
-                ng.push(r)
-            }
-            return ng
-        }
-    }
+			return ng;
+		}
+	}
 	onMount(() => {
 		let root: {
 			id: 'root';
@@ -56,19 +54,17 @@
 			};
 			right: {
 				id: '2';
-                split: 'h'
-                next: {
-                    id: '3'
-                    split: 'v'
-                    next: {
-                        id: 5
-                    }
-                }
+				split: 'h';
+				next: {
+					id: '3';
+					split: 'v';
+					next: {
+						id: 5;
+					};
+				};
 			};
 		};
 	});
-
-    
 </script>
 
 <div class="flex h-[100vh] w-full">
