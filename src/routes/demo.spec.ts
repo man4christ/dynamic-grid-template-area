@@ -65,11 +65,11 @@ function add2(l, r, split) {
   if (split === 'h') {
 
     let lRepeatRows = []
-    let lrepeat = rc / lc;
+    let lrepeat = (rc * lc) / lc;
     for (let i = 0; i < ll; i++) {
       let repeatRow = []
-      for (let k = 0; k < lrepeat; k++) {
-        for (let j = 0; j < lc; j++) {
+      for (let j = 0; j < lc; j++) {
+        for (let k = 0; k < lrepeat; k++) {
           repeatRow.push(l[i][j])
         }
       }
@@ -77,11 +77,11 @@ function add2(l, r, split) {
     }
 
     let rRepeatRows = []
-    let rrepeat = lc / rc;
+    let rrepeat = (lc * rc) / rc;
     for (let i = 0; i < rl; i++) {
       let repeatRow = []
-      for (let k = 0; k < rrepeat; k++) {
-        for (let j = 0; j < rc; j++) {
+      for (let j = 0; j < rc; j++) {
+        for (let k = 0; k < rrepeat; k++) {
           repeatRow.push(r[i][j])
         }
       }
