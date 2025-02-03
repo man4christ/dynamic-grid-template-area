@@ -88,19 +88,13 @@ function add2(l, r, split) {
       rRepeatRows.push(repeatRow)
     }
 
-
-
-
-      for (let j = 0; j < lRepeatRows.length; j++) {
-        com.push(lRepeatRows[j])
-      }
-      for (let j = 0; j < rRepeatRows.length; j++) {
-        com.push(rRepeatRows[j])
-      }
+    for (let j = 0; j < lRepeatRows.length; j++) {
+      com.push(lRepeatRows[j])
+    }
+    for (let j = 0; j < rRepeatRows.length; j++) {
+      com.push(rRepeatRows[j])
+    }
   }
-
-
-
 
   return com;
 }
@@ -112,6 +106,15 @@ function add(n: node) {
     let lg = add(n.left)
     let rg = add(n.right)
     let l = add2(lg, rg, n.split);
+
+    for (let i = 0; i < l.length; i++) {
+      let s = ''
+      for (let j = 0; j < l[i].length; j++) {
+        s += `${l[i][j]} `
+      }
+      console.log(s)
+    }
+    console.log('///////////////////////////')
     return l
   }
 }
@@ -129,7 +132,14 @@ describe('suite name', () => {
         right: {
           split: 'h',
           left: {
-            id: '4'
+            split: 'v',
+            left: {
+              id: '4'
+            },
+            right: {
+              id: '7'
+            }
+
           },
           right: {
             id: '6'
