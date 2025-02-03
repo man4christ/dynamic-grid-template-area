@@ -178,7 +178,7 @@ function joinGridTemplateAreas(lrgta: string[][], rrgta: string[][], split: stri
 }
 
 export function renderGridTemplateAreas(n: node) {
-    if (n.split === undefined && n.id !== 'root') {
+    if (n.split === undefined) {
         return [[n.id]];
     } else {
         let leftRenderedGridTemplateAreas = renderGridTemplateAreas(n.left)
