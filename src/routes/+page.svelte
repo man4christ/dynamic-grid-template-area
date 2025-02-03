@@ -7,7 +7,7 @@
 	let template = $state();
 
 	let root: any = {
-		id: 'root',
+		id: 'a',
 		split: undefined,
 		left: undefined,
 		right: undefined
@@ -71,10 +71,10 @@
 			found = findNodes(n.left, key);
 		}
 
-        if (found){
-            return found
-        }
-        
+		if (found) {
+			return found;
+		}
+
 		if (n.right) {
 			found = findNodes(n.right, key);
 		}
@@ -82,24 +82,18 @@
 		return found;
 	}
 
-	function splitVertical(paneId: string) {
+	function splitVertical(paneId: string, split: string) {
 		let n = findNodes(root, paneId);
 
 		/**n should never be undefined */
 		if (!n) {
-            console.log('did not find ' , paneId, root)
+			console.log('did not find ', paneId, root);
 
 			return;
 		}
 
 		let lid: string = elements[elements.length - 1];
-		let nid = '';
-		// TODO fix this. will need to update tests
-		if (nid === 'root') {
-			nid = 'a';
-		} else {
-			nid = String.fromCharCode(lid.charCodeAt(0) + 1);
-		}
+		let nid = String.fromCharCode(lid.charCodeAt(0) + 1);
 
 		if (n.left && n.right) {
 			n.left = {
@@ -112,9 +106,9 @@
 				}
 			};
 
-			n.split = 'v';
+			n.split = split;
 		} else {
-			n.split = 'v';
+			n.split = split;
 			n.left = {
 				id: n.id
 			};
@@ -151,14 +145,21 @@
 				style="grid-area: {a};"
 				class="header w-full items-center border border-neutral-200 bg-neutral-950 text-center"
 			>
-				<div class="flex h-full items-center justify-center text-neutral-200">
+				<div class="flex h-full flex-col items-center justify-center text-neutral-200">
 					{a}
 					{new Date().getSeconds()}
 					<br />
 					<button
+						class="bg-green-500 text-neutral-700"
 						onclick={() => {
-							splitVertical(a);
+							splitVertical(a, 'v');
 						}}>Vertical Split</button
+					>
+					<button
+						class="bg-green-500 text-neutral-700"
+						onclick={() => {
+							splitVertical(a, 'h');
+						}}>Horizontal</button
 					>
 				</div>
 			</div>
