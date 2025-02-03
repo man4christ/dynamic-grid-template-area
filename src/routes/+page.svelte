@@ -69,32 +69,29 @@
 
 <div class="flex h-[100vh] w-full">
 	<div class="wrapper w-full">
-		<div style="grid-area: one;" class="header w-full items-center bg-red-50 text-center">
-			<div class="flex h-full items-center justify-center">1</div>
-		</div>
-		<div style="grid-area: two;" class="header w-full items-center bg-red-200 text-center">
-			<div class="flex h-full items-center justify-center">2</div>
-		</div>
-		<div style="grid-area: three;" class="header w-full items-center bg-red-400 text-center">
-			<div class="flex h-full items-center justify-center">3</div>
-		</div>
-		<div style="grid-area: four;" class="header w-full items-center bg-red-600 text-center">
-			<div class="flex h-full items-center justify-center">4</div>
-		</div>
-		<div style="grid-area: five;" class="header w-full items-center bg-red-800 text-center">
-			<div class="flex h-full items-center justify-center">5</div>
-		</div>
+		{#each Array(16) as a, idx}
+			<div
+				style="grid-area: {String.fromCharCode(97 + idx)};"
+				class="header w-full items-center border border-red-900 bg-red-50 text-center"
+			>
+				<div class="flex h-full items-center justify-center">{String.fromCharCode(97 + idx)}</div>
+			</div>
+		{/each}
 	</div>
 </div>
 
 <style>
 	.wrapper {
 		display: grid;
-		grid-template-columns: repeat(3, 2);
+		grid-template-columns: repeat(8, 16);
 		grid-template-areas:
-			'a a a a a a a a b b b b c c d d i i i i i i i i j j j j k k l l '
-			'a a a a a a a a e e e e e e e e i i i i i i i i m m m m m m m m '
-			'f f f f f f f f f f f f f f f f n n n n n n n n n n n n n n n n '
-			'g g g g g g g g h h h h h h h h o o o o o o o o p p p p p p p p ';
+			'a a a a a a a a b b b b c c d d '
+			'a a a a a a a a e e e e e e e e '
+			'f f f f f f f f f f f f f f f f '
+			'g g g g g g g g h h h h h h h h '
+			'i i i i i i i i j j j j k k l l '
+			'i i i i i i i i m m m m m m m m '
+			'n n n n n n n n n n n n n n n n '
+			'o o o o o o o o p p p p p p p p ';
 	}
 </style>
