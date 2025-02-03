@@ -10,12 +10,78 @@ interface rootNode {
     right: node;
 }
 
+
+/** renders vertical grid template areas
+ * 
+ * takes a left grid template areas, determines if any columns need to repeat, repeats them for each row
+ * then the same for the right grid
+ * then concats the rows of left and the right
+ */
+function joinVerticalGridTemplateAreas(
+    gta: string[][],
+    lrgta: string[][],
+    rrgta: string[][]
+) {
+
+    let leftNumRows = lrgta.length
+    let rightNumRows = rrgta.length
+
+    let leftNumCols = lrgta[0].length
+    let rightNumCols = rrgta[0].length
+
+    let lColRepeat = rightNumCols / leftNumCols
+    let lRowRepeat = rightNumRows / leftNumRows
+    let lRepeatRow = []
+    for (let i = 0; i < leftNumRows; i++) {
+        for (let m = 0; m < lRowRepeat; m++) {
+            let repeatCol: string[] = []
+            for (let j = 0; j < leftNumCols; j++) {
+                for (let k = 0; k < lColRepeat; k++) {
+                    repeatCol.push(lrgta[i][j])
+                }
+            }
+            lRepeatRow.push(repeatCol)
+        }
+    }
+
+    let rRepeatRow = []
+    let rColRepeat = leftNumCols / rightNumCols
+    let rRowRepeat = leftNumRows / rightNumRows
+    for (let i = 0; i < rightNumRows; i++) {
+        for (let m = 0; m < rRowRepeat; m++) {
+            let repeatCol: string[] = []
+            for (let j = 0; j < rightNumCols; j++) {
+                for (let k = 0; k < rColRepeat; k++) {
+                    repeatCol.push(rrgta[i][j])
+                }
+            }
+            rRepeatRow.push(repeatCol)
+        }
+    }
+
+
+    for (let i = 0; i < rRepeatRow.length; i++) {
+        let row = []
+
+        for (let j = 0; j < lRepeatRow[i].length; j++) {
+            row.push(lRepeatRow[i][j])
+        }
+
+        for (let j = 0; j < rRepeatRow[i].length; j++) {
+            row.push(rRepeatRow[i][j])
+        }
+        gta.push(row)
+    }
+
+}
+
+
 /**
  * 
  * @param lrgta left grid template area that is rendered.
  * @param rrgta right grid template area that is rendered.
  * @param split how to join them. v for vertical. h for horizontal.
- * @returns 
+ * @returns returns the joined grid template areas. updating the areas as needed e.g. filling in the grid as necessary.
  */
 function joinGridTemplateAreas(lrgta: string[][], rrgta: string[][], split: string) {
     let leftNumRows = lrgta.length
@@ -24,67 +90,22 @@ function joinGridTemplateAreas(lrgta: string[][], rrgta: string[][], split: stri
     let leftNumCols = lrgta[0].length
     let rightNumCols = rrgta[0].length
 
-    let com = [];
+    let gta: string[][] = [];
     if (split === 'v') {
-        let lColRepeat =  rightNumCols / leftNumCols
-        let lRowRepeat = rightNumRows / leftNumRows 
-        let lRepeatRow = []
-        for (let i = 0; i < leftNumRows; i++) {
-            for (let m = 0; m < lRowRepeat; m++) {
-                let repeatCol: string[] = []
-                for (let j = 0; j < leftNumCols; j++) {
-                    for (let k = 0; k < lColRepeat; k++) {
-                        repeatCol.push(lrgta[i][j])
-                    }
-                }
-                lRepeatRow.push(repeatCol)
-            }
-        }
-
-        let rRepeatRow = []
-        let rColRepeat = leftNumCols / rightNumCols
-        let rRowRepeat = leftNumRows / rightNumRows
-
-        for (let i = 0; i < rightNumRows; i++) {
-            for (let m = 0; m < rRowRepeat; m++) {
-                let repeatCol: string[] = []
-
-                for (let j = 0; j < rightNumCols; j++) {
-                    for (let k = 0; k < rColRepeat; k++) {
-                        repeatCol.push(rrgta[i][j])
-                    }
-                }
-                rRepeatRow.push(repeatCol)
-            }
-        }
-
-
-        for (let i = 0; i < rRepeatRow.length; i++) {
-            let row = []
-
-            for (let j = 0; j < lRepeatRow[i].length; j++) {
-                row.push(lRepeatRow[i][j])
-            }
-
-            for (let j = 0; j < rRepeatRow[i].length; j++) {
-                row.push(rRepeatRow[i][j])
-            }
-            com.push(row)
-        }
-
+        joinVerticalGridTemplateAreas(gta, lrgta, rrgta)
     }
 
     if (split === 'h') {
         if (rightNumCols == leftNumCols && rightNumRows == leftNumRows) {
             lrgta.forEach(la => {
-                com.push(la)
+                gta.push(la)
 
             });
             rrgta.forEach(ra => {
-                com.push(ra)
+                gta.push(ra)
             });
 
-            return com
+            return gta
         }
 
         let lRepeatRows = []
@@ -112,14 +133,14 @@ function joinGridTemplateAreas(lrgta: string[][], rrgta: string[][], split: stri
         }
 
         for (let j = 0; j < lRepeatRows.length; j++) {
-            com.push(lRepeatRows[j])
+            gta.push(lRepeatRows[j])
         }
         for (let j = 0; j < rRepeatRows.length; j++) {
-            com.push(rRepeatRows[j])
+            gta.push(rRepeatRows[j])
         }
     }
 
-    return com;
+    return gta;
 }
 
 export function renderGridTemplateAreas(n: node) {
