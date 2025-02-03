@@ -26,7 +26,7 @@
 			let s = '';
 			for (let j = 0; j < gta[i].length; j++) {
 				s += `${gta[i][j]} `;
-				els[s] = s;
+				els[gta[i][j]] = gta[i][j];
 			}
 			grid += '"' + s + '"\n';
 		}
@@ -34,6 +34,8 @@
 		elements = Object.keys(els).sort((a: string, b: string) => {
 			return a.charCodeAt(0) - b.charCodeAt(0);
 		});
+
+        console.log(elements)
 
 		template = `display: grid;
         grid-template-columns: repeat(${gta.length}, ${gta[0].length});
@@ -66,11 +68,11 @@
 		let found;
 
 		if (n.left) {
-			found = flattenNodes(n.left);
+			found = findNodes(n.left, key);
 		}
 
 		if (n.right) {
-			found = flattenNodes(n.right);n
+			found = findNodes(n.right, key);
 		}
 
         return found
@@ -90,7 +92,7 @@
 		if (nid === 'root') {
 			nid = 'a';
 		} else {
-			nid = String.fromCharCode(nid.charCodeAt(0) + 1);
+			nid = String.fromCharCode(lid.charCodeAt(0) + 1);
 		}
 
 		n.split = 'v';
