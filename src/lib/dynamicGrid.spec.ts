@@ -243,4 +243,75 @@ describe('suite name', () => {
         expect(grid, 'expected grids to match but they do not').toEqual(expectedGrid)
     })
 
+    it('simple vertical', () => {
+
+        let root = {
+            id: 'root',
+            split: 'v',
+            left: {
+                id: 'b',
+            },
+            right: {
+                id: 'c',
+            },
+        }
+
+
+        let gta = renderGridTemplateAreas(root)
+        expect(gta).toEqual([['b', 'c']])
+    })
+
+    it('simple horizontal', () => {
+
+        let root = {
+            id: 'root',
+            split: 'h',
+            left: {
+                id: 'b',
+            },
+            right: {
+                id: 'c',
+            },
+        }
+
+
+        let gta = renderGridTemplateAreas(root)
+        expect(gta).toEqual([['b'], ['c']])
+    })
+
+    it('simple horizontal and vertical', () => {
+
+        let root = {
+            id: 'root',
+            split: 'h',
+            left: {
+                split: 'h',
+                left: {
+                    id: 'a',
+                },
+                right: {
+                    id: 'b'
+                }
+            },
+            right: {
+                split: 'v',
+                left: {
+                    id: 'c',
+                },
+                right: {
+                    id: 'd'
+                }
+
+            },
+        }
+
+        let gta = renderGridTemplateAreas(root)
+        expect(gta).toEqual([
+            ['a', 'a'],
+            ['b', 'b'],
+            ['c', 'd'],
+            ['c', 'd']
+        ])
+    })
+
 })

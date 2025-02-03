@@ -92,7 +92,7 @@ function joinHorizontalGridTemplateAreas(
      * the l repeat logic below would equal 1 and repeat an extra time if the 
      * areas are equal. 
      */
-    if (rightNumCols == leftNumCols ) {
+    if (rightNumCols == leftNumCols) {
         lrgta.forEach(la => {
             gta.push(la)
 
@@ -118,27 +118,34 @@ function joinHorizontalGridTemplateAreas(
      * each index is repeated twice to get 1, 1, 2, 2
     */
     let lRepeatRows = []
-    let lrepeat = (rightNumCols * leftNumCols) / leftNumCols;
+    let lColRepeat = (rightNumCols * leftNumCols) / leftNumCols;
+    let lRowRepeat = rightNumRows / leftNumRows
+
     for (let i = 0; i < leftNumRows; i++) {
-        let repeatRow = []
-        for (let j = 0; j < leftNumCols; j++) {
-            for (let k = 0; k < lrepeat; k++) {
-                repeatRow.push(lrgta[i][j])
+        for (let m = 0; m < lRowRepeat; m++) {
+            let repeatRow = []
+            for (let j = 0; j < leftNumCols; j++) {
+                for (let k = 0; k < lColRepeat; k++) {
+                    repeatRow.push(lrgta[i][j])
+                }
             }
+            lRepeatRows.push(repeatRow)
         }
-        lRepeatRows.push(repeatRow)
     }
 
     let rRepeatRows = []
-    let rrepeat = (leftNumCols * rightNumCols) / rightNumCols;
+    let rColRepeat = (leftNumCols * rightNumCols) / rightNumCols;
+    let rRowRepeat = leftNumRows / rightNumRows
     for (let i = 0; i < rightNumRows; i++) {
-        let repeatRow = []
-        for (let j = 0; j < rightNumCols; j++) {
-            for (let k = 0; k < rrepeat; k++) {
-                repeatRow.push(rrgta[i][j])
+        for (let m = 0; m < rRowRepeat; m++) {
+            let repeatRow = []
+            for (let j = 0; j < rightNumCols; j++) {
+                for (let k = 0; k < rColRepeat; k++) {
+                    repeatRow.push(rrgta[i][j])
+                }
             }
+            rRepeatRows.push(repeatRow)
         }
-        rRepeatRows.push(repeatRow)
     }
 
     for (let j = 0; j < lRepeatRows.length; j++) {
