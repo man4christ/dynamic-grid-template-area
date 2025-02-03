@@ -12,22 +12,22 @@ interface rootNode {
 
 function add2(l: [], r: [], split: string) {
 
-    let ll = l.length
-    let rl = r.length
+    let leftNumRows = l.length
+    let rightNumRows = r.length
 
-    let lc = l[0].length
-    let rc = r[0].length
+    let leftNumCols = l[0].length
+    let rightNumCols = r[0].length
 
 
     let com = [];
     if (split === 'v') {
-        let lColRepeat = rc % lc === 0 ? rc / lc : (rc * lc) / (lc);
-        let lRowRepeat = rl % ll === 0 ? rl / ll : (rl * ll) / (l);
+        let lColRepeat = rightNumCols % leftNumCols === 0 ? rightNumCols / leftNumCols : (rightNumCols * leftNumCols) / (leftNumCols);
+        let lRowRepeat = rightNumRows % leftNumRows === 0 ? rightNumRows / leftNumRows : (rightNumRows * leftNumRows) / (l);
         let lRepeatRow = []
-        for (let i = 0; i < ll; i++) {
+        for (let i = 0; i < leftNumRows; i++) {
             for (let m = 0; m < lRowRepeat; m++) {
                 let repeatCol = []
-                for (let j = 0; j < lc; j++) {
+                for (let j = 0; j < leftNumCols; j++) {
                     for (let k = 0; k < lColRepeat; k++) {
                         repeatCol.push(l[i][j])
                     }
@@ -37,14 +37,14 @@ function add2(l: [], r: [], split: string) {
         }
 
         let rRepeatRow = []
-        let rColRepeat = lc % rc === 0 ? lc / rc : (lc * rc) / (rc);
-        let rRowRepeat = ll % rl === 0 ? ll / rl : (ll * rl) / (rl);
+        let rColRepeat = leftNumCols % rightNumCols === 0 ? leftNumCols / rightNumCols : (leftNumCols * rightNumCols) / (rightNumCols);
+        let rRowRepeat = leftNumRows % rightNumRows === 0 ? leftNumRows / rightNumRows : (leftNumRows * rightNumRows) / (rightNumRows);
 
-        for (let i = 0; i < rl; i++) {
+        for (let i = 0; i < rightNumRows; i++) {
             for (let m = 0; m < rRowRepeat; m++) {
                 let repeatCol = []
 
-                for (let j = 0; j < rc; j++) {
+                for (let j = 0; j < rightNumCols; j++) {
                     for (let k = 0; k < rColRepeat; k++) {
                         repeatCol.push(r[i][j])
                     }
@@ -71,7 +71,7 @@ function add2(l: [], r: [], split: string) {
     }
 
     if (split === 'h') {
-        if (rc == lc && rl == ll) {
+        if (rightNumCols == leftNumCols && rightNumRows == leftNumRows) {
             l.forEach(la => {
                 com.push(la)
 
@@ -84,10 +84,10 @@ function add2(l: [], r: [], split: string) {
         }
 
         let lRepeatRows = []
-        let lrepeat = (rc * lc) / lc;
-        for (let i = 0; i < ll; i++) {
+        let lrepeat = (rightNumCols * leftNumCols) / leftNumCols;
+        for (let i = 0; i < leftNumRows; i++) {
             let repeatRow = []
-            for (let j = 0; j < lc; j++) {
+            for (let j = 0; j < leftNumCols; j++) {
                 for (let k = 0; k < lrepeat; k++) {
                     repeatRow.push(l[i][j])
                 }
@@ -96,10 +96,10 @@ function add2(l: [], r: [], split: string) {
         }
 
         let rRepeatRows = []
-        let rrepeat = (lc * rc) / rc;
-        for (let i = 0; i < rl; i++) {
+        let rrepeat = (leftNumCols * rightNumCols) / rightNumCols;
+        for (let i = 0; i < rightNumRows; i++) {
             let repeatRow = []
-            for (let j = 0; j < rc; j++) {
+            for (let j = 0; j < rightNumCols; j++) {
                 for (let k = 0; k < rrepeat; k++) {
                     repeatRow.push(r[i][j])
                 }
