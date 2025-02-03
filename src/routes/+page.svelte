@@ -92,8 +92,9 @@
 		display: grid;
 		grid-template-columns: repeat(3, 2);
 		grid-template-areas:
-			'one  three'
-			'five three'
-			'two  four';
+			'a a a a a a a a b b b b c c d d i i i i i i i i j j j j k k l l '
+			'a a a a a a a a e e e e e e e e i i i i i i i i m m m m m m m m '
+			'f f f f f f f f f f f f f f f f n n n n n n n n n n n n n n n n '
+			'g g g g g g g g h h h h h h h h o o o o o o o o p p p p p p p p ';
 	}
 </style>

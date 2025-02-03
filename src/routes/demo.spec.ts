@@ -21,7 +21,6 @@ function add2(l, r, split) {
   let rc = r[0].length
 
 
-
   let com = [];
   if (split === 'v') {
     let lrepeat = rc % lc === 0 ? rc / lc : (rc * lc) / (lc);
@@ -77,6 +76,20 @@ function add2(l, r, split) {
   }
 
   if (split === 'h') {
+
+    if (rc == lc && rl == ll){
+      l.forEach(la => {
+        com.push(la)
+        
+      });
+      r.forEach(ra => {
+        com.push(ra)
+        
+      });
+
+      return com
+      
+    }
 
     let lRepeatRows = []
     let lrepeat = (rc * lc) / lc;
@@ -238,9 +251,9 @@ describe('suite name', () => {
     for (let i = 0; i < l.length; i++) {
       let s = ''
       for (let j = 0; j < l[i].length; j++) {
-        s += `${l[i][j]},`
+        s += `${l[i][j]} `
       }
-      console.log(s)
+      console.log(`"${s}"`)
     }
   })
 
