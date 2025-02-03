@@ -32,7 +32,16 @@
 		}
 
 		elements = Object.keys(els).sort((a: string, b: string) => {
-			return a.charCodeAt(0) - b.charCodeAt(0);
+			let aval = 0,
+				bval = 0;
+
+			for (let i = 0; i < a.length; i++) {
+				aval += a.charCodeAt(i) - 96;
+			}
+            for (let i = 0; i < b.length; i++) {
+				bval += b.charCodeAt(i) - 96;
+			}
+			return aval - bval;
 		});
 
 		console.log(elements);
@@ -93,8 +102,13 @@
 		}
 
 		let lid: string = elements[elements.length - 1];
-		let nid = numberToLetters(lid.charCodeAt(0) - 96 + 1);
-        console.log('node before', n, root);
+		let val = 0;
+		for (let i = 0; i < lid.length; i++) {
+			val += lid.charCodeAt(i) - 96;
+		}
+
+		let nid = numberToLetters(val + 1);
+		console.log('node before', n, root);
 		if (n.left && n.right) {
 			n.left = {
 				split: n.split,
@@ -105,9 +119,11 @@
 					id: nid
 				}
 			};
+			n.id = '';
 			n.split = split;
 		} else {
 			n.split = split;
+
 			n.left = {
 				id: n.id
 			};
@@ -115,6 +131,7 @@
 			n.right = {
 				id: nid
 			};
+			n.id = '';
 		}
 		console.log('node', n, root);
 		onGridUpdate();
