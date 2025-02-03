@@ -176,7 +176,6 @@
 
 	let hidden = $state(false);
 </script>
-{JSON.stringify(root)}
 <div class="flex h-[100vh] w-full flex-col">
 	<div style="min-width: 1px; {template}" class="h-[100%] w-full">
 		<!-- svelte-ignore a11y_click_events_have_key_events -->
