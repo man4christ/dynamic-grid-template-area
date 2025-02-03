@@ -6,18 +6,17 @@
 
 	let template = $state();
 
-	let root: any = {
+	let root: any = $state({
 		id: 'a',
 		split: undefined,
 		left: undefined,
 		right: undefined
-	};
+	});
 
 	let elements = $state([]);
 
 	function onGridUpdate() {
 		let gta = renderGridTemplateAreas(root);
-		console.log(gta);
 
 		let els = {};
 		let grid = '';
@@ -38,13 +37,11 @@
 			for (let i = 0; i < a.length; i++) {
 				aval += a.charCodeAt(i) - 96;
 			}
-            for (let i = 0; i < b.length; i++) {
+			for (let i = 0; i < b.length; i++) {
 				bval += b.charCodeAt(i) - 96;
 			}
 			return aval - bval;
 		});
-
-		console.log(elements);
 
 		template = `display: grid;
         grid-template-columns: repeat(${gta.length}, ${gta[0].length});
@@ -91,13 +88,11 @@
 		return found;
 	}
 
-	function splitVertical(paneId: string, split: string) {
+	function splitPane(paneId: string, split: string) {
 		let n = findNodes(root, paneId);
 
 		/**n should never be undefined */
 		if (!n) {
-			console.log('did not find ', paneId, root);
-
 			return;
 		}
 
@@ -108,7 +103,6 @@
 		}
 
 		let nid = numberToLetters(val + 1);
-		console.log('node before', n, root);
 		if (n.left && n.right) {
 			n.left = {
 				split: n.split,
@@ -119,7 +113,7 @@
 					id: nid
 				}
 			};
-			n.id = '';
+			n.id = undefined;
 			n.split = split;
 		} else {
 			n.split = split;
@@ -131,10 +125,56 @@
 			n.right = {
 				id: nid
 			};
-			n.id = '';
+			n.id = undefined;
 		}
-		console.log('node', n, root);
 		onGridUpdate();
+	}
+
+	function deletePane(n: node, key: string) {
+		if (n.id === key) {
+			return n;
+		}
+		let found;
+
+		if (n.left) {
+			found = deletePane(n.left, key);
+		}
+
+		if (found) {
+			//do delete. this is the parent
+			if (n.right.split) {
+				n.split = n.right.split;
+				n.left = n.right.left;
+				n.right = n.right.right;
+			} else {
+				n.id = n.right.id;
+				n.split = undefined;
+				n.left = undefined;
+				n.right = undefined;
+			}
+			onGridUpdate();
+			return;
+		}
+
+		if (n.right) {
+			found = deletePane(n.right, key);
+		}
+
+		if (found) {
+			//do delete this is the parent
+			if (n.left.split) {
+				n.split = n.left.split;
+				n.left = n.left.left;
+				n.right = n.left.right;
+			} else {
+				n.id = n.left.id;
+				n.split = undefined;
+				n.left = undefined;
+				n.right = undefined;
+			}
+			onGridUpdate();
+			return;
+		}
 	}
 
 	onMount(() => {
@@ -144,14 +184,7 @@
 </script>
 
 <div class="flex h-[100vh] w-full flex-col">
-	<button
-		onclick={() => {
-			splitVertical('root');
-			toggle = !toggle;
-		}}
-	>
-		Toggle</button
-	>
+	{JSON.stringify(root)}
 	<div style="min-width: 1px; {template}" class="h-[100%] w-full">
 		<!-- svelte-ignore a11y_click_events_have_key_events -->
 		{#each elements as a, idx}
@@ -168,14 +201,22 @@
 					<button
 						class="bg-green-500 text-neutral-700"
 						onclick={() => {
-							splitVertical(a, 'v');
+							splitPane(a, 'v');
 						}}>Vertical Split</button
 					>
 					<button
 						class="bg-green-500 text-neutral-700"
 						onclick={() => {
-							splitVertical(a, 'h');
+							splitPane(a, 'h');
 						}}>Horizontal</button
+					>
+
+					<button
+						class="bg-green-500 text-neutral-700"
+						onclick={() => {
+							console.log('root', root);
+							deletePane(root, a);
+						}}>Delete</button
 					>
 				</div>
 			</div>

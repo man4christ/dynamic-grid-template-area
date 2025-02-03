@@ -133,9 +133,8 @@ function add(n: node) {
       for (let j = 0; j < l[i].length; j++) {
         s += `${l[i][j]} `
       }
-      console.log(s)
+
     }
-    console.log('///////////////////////////')
     return l
   }
 }

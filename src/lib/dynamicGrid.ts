@@ -196,9 +196,7 @@ export function renderGridTemplateAreas(n: node) {
             for (let j = 0; j < renderedGridTemplateAreas[i].length; j++) {
                 s += `${renderedGridTemplateAreas[i][j]} `
             }
-            console.log(s)
         }
-        console.log('///////////////////////////')
         return renderedGridTemplateAreas
     }
 }
