@@ -33,7 +33,6 @@ function add2(l, r, split) {
           for (let k = 0; k < lColRepeat; k++) {
             repeatCol.push(l[i][j])
           }
-
         }
         lRepeatRow.push(repeatCol)
       }
@@ -145,7 +144,7 @@ describe('suite name', () => {
   it('foo', () => {
     let root = {
       id: 'root',
-      split: 'h',
+      split: 'v',
       left: {
         split: 'h',
         left: {
