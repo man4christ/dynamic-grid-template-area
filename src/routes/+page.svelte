@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { renderGridTemplateAreas, type node } from '$lib/dynamicGrid';
+	import { numberToLetters, renderGridTemplateAreas, type node } from '$lib/dynamicGrid';
 	import { onMount } from 'svelte';
 
 	let toggle = $state(true);
@@ -93,8 +93,8 @@
 		}
 
 		let lid: string = elements[elements.length - 1];
-		let nid = String.fromCharCode(lid.charCodeAt(0) + 1);
-
+		let nid = numberToLetters(lid.charCodeAt(0) - 96 + 1);
+        console.log('node before', n, root);
 		if (n.left && n.right) {
 			n.left = {
 				split: n.split,
@@ -105,7 +105,6 @@
 					id: nid
 				}
 			};
-
 			n.split = split;
 		} else {
 			n.split = split;

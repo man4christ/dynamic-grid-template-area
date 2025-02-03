@@ -5,6 +5,18 @@ export interface node {
     split: string;
 }
 
+export function numberToLetters(number: number) {
+    let result = ""
+    while (number > 0) {
+        number -= 1
+        let remainder = number % 26
+        result = String.fromCharCode(97 + remainder) + result
+        number = (number - remainder) // 26
+    }
+    return result
+}
+
+
 /** renders vertical grid template areas
  * 
  * takes a left grid template areas, determines if any columns need to repeat, repeats them for each row
