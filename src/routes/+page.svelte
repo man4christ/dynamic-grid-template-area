@@ -8,8 +8,6 @@
 
 	let template = $state();
 
-	
-
 	let elements = $state([]);
 	let deletedElements = $state({});
 
@@ -116,7 +114,6 @@
 	}
 
 	function deletePane(n: node, key: string) {
-        
 		if (n.id === key) {
 			return n;
 		}
@@ -149,12 +146,13 @@
 		}
 
 		if (found) {
+            let tmp = n.right.id
 			deletedElements[n.right.id] = n.right.id;
 			//do delete this is the parent
 			if (n.left.split) {
 				n.split = n.left.split;
+                n.right = n.left.right;
 				n.left = n.left.left;
-				n.right = n.left.right;
 			} else {
 				n.id = n.left.id;
 				n.split = undefined;
@@ -167,7 +165,9 @@
 		}
 	}
 
+    let root = $state()
 	onMount(() => {
+        root = paneService.rootPane
 		paneService.rootPane.buffer = Component;
 		paneService.onDeletePane = deletePane;
 		paneService.onSplitPane = splitPane;
@@ -176,7 +176,7 @@
 
 	let hidden = $state(false);
 </script>
-
+{JSON.stringify(root)}
 <div class="flex h-[100vh] w-full flex-col">
 	<div style="min-width: 1px; {template}" class="h-[100%] w-full">
 		<!-- svelte-ignore a11y_click_events_have_key_events -->
@@ -184,7 +184,7 @@
 			<!-- svelte-ignore a11y_click_events_have_key_events -->
 			<!-- svelte-ignore a11y_no_static_element_interactions -->
 			{#if !deletedElements[a]}
-				{@const pane = findNodes(root, a)}
+				{@const pane = findNodes(paneService.rootPane, a)}
 				{@const Component = pane?.buffer}
 				<div
 					style="grid-area: {a};"

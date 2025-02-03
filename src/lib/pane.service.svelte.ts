@@ -4,13 +4,13 @@ import type { node } from "./dynamicGrid";
 
 export class PaneService {
     private static _instance: PaneService;
-    rootPane: node = $state({
+    rootPane: node = {
         id: 'a',
         split: undefined,
         left: undefined,
         right: undefined,
 
-    });
+    };
 
     onDeletePane: Function = () => { }
     onSplitPane: Function = () => { }
