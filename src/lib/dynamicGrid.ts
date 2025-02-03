@@ -10,26 +10,31 @@ interface rootNode {
     right: node;
 }
 
-function add2(l: [], r: [], split: string) {
+/**
+ * 
+ * @param lrgta left grid template area that is rendered.
+ * @param rrgta right grid template area that is rendered.
+ * @param split how to join them. v for vertical. h for horizontal.
+ * @returns 
+ */
+function joinGridTemplateAreas(lrgta: string[][], rrgta: string[][], split: string) {
+    let leftNumRows = lrgta.length
+    let rightNumRows = rrgta.length
 
-    let leftNumRows = l.length
-    let rightNumRows = r.length
-
-    let leftNumCols = l[0].length
-    let rightNumCols = r[0].length
-
+    let leftNumCols = lrgta[0].length
+    let rightNumCols = rrgta[0].length
 
     let com = [];
     if (split === 'v') {
-        let lColRepeat = rightNumCols % leftNumCols === 0 ? rightNumCols / leftNumCols : (rightNumCols * leftNumCols) / (leftNumCols);
-        let lRowRepeat = rightNumRows % leftNumRows === 0 ? rightNumRows / leftNumRows : (rightNumRows * leftNumRows) / (l);
+        let lColRepeat =  rightNumCols / leftNumCols
+        let lRowRepeat = rightNumRows / leftNumRows 
         let lRepeatRow = []
         for (let i = 0; i < leftNumRows; i++) {
             for (let m = 0; m < lRowRepeat; m++) {
-                let repeatCol = []
+                let repeatCol: string[] = []
                 for (let j = 0; j < leftNumCols; j++) {
                     for (let k = 0; k < lColRepeat; k++) {
-                        repeatCol.push(l[i][j])
+                        repeatCol.push(lrgta[i][j])
                     }
                 }
                 lRepeatRow.push(repeatCol)
@@ -37,18 +42,17 @@ function add2(l: [], r: [], split: string) {
         }
 
         let rRepeatRow = []
-        let rColRepeat = leftNumCols % rightNumCols === 0 ? leftNumCols / rightNumCols : (leftNumCols * rightNumCols) / (rightNumCols);
-        let rRowRepeat = leftNumRows % rightNumRows === 0 ? leftNumRows / rightNumRows : (leftNumRows * rightNumRows) / (rightNumRows);
+        let rColRepeat = leftNumCols / rightNumCols
+        let rRowRepeat = leftNumRows / rightNumRows
 
         for (let i = 0; i < rightNumRows; i++) {
             for (let m = 0; m < rRowRepeat; m++) {
-                let repeatCol = []
+                let repeatCol: string[] = []
 
                 for (let j = 0; j < rightNumCols; j++) {
                     for (let k = 0; k < rColRepeat; k++) {
-                        repeatCol.push(r[i][j])
+                        repeatCol.push(rrgta[i][j])
                     }
-
                 }
                 rRepeatRow.push(repeatCol)
             }
@@ -72,11 +76,11 @@ function add2(l: [], r: [], split: string) {
 
     if (split === 'h') {
         if (rightNumCols == leftNumCols && rightNumRows == leftNumRows) {
-            l.forEach(la => {
+            lrgta.forEach(la => {
                 com.push(la)
 
             });
-            r.forEach(ra => {
+            rrgta.forEach(ra => {
                 com.push(ra)
             });
 
@@ -89,7 +93,7 @@ function add2(l: [], r: [], split: string) {
             let repeatRow = []
             for (let j = 0; j < leftNumCols; j++) {
                 for (let k = 0; k < lrepeat; k++) {
-                    repeatRow.push(l[i][j])
+                    repeatRow.push(lrgta[i][j])
                 }
             }
             lRepeatRows.push(repeatRow)
@@ -101,7 +105,7 @@ function add2(l: [], r: [], split: string) {
             let repeatRow = []
             for (let j = 0; j < rightNumCols; j++) {
                 for (let k = 0; k < rrepeat; k++) {
-                    repeatRow.push(r[i][j])
+                    repeatRow.push(rrgta[i][j])
                 }
             }
             rRepeatRows.push(repeatRow)
@@ -118,22 +122,22 @@ function add2(l: [], r: [], split: string) {
     return com;
 }
 
-export function add(n: node) {
+export function renderGridTemplateAreas(n: node) {
     if (n.split === undefined && n.id !== 'root') {
         return [[n.id]];
     } else {
-        let lg = add(n.left)
-        let rg = add(n.right)
-        let l = add2(lg, rg, n.split);
+        let leftRenderedGridTemplateAreas = renderGridTemplateAreas(n.left)
+        let rightRenderedGridTemplateAreas = renderGridTemplateAreas(n.right)
+        let renderedGridTemplateAreas = joinGridTemplateAreas(leftRenderedGridTemplateAreas, rightRenderedGridTemplateAreas, n.split);
 
-        for (let i = 0; i < l.length; i++) {
+        for (let i = 0; i < renderedGridTemplateAreas.length; i++) {
             let s = ''
-            for (let j = 0; j < l[i].length; j++) {
-                s += `${l[i][j]} `
+            for (let j = 0; j < renderedGridTemplateAreas[i].length; j++) {
+                s += `${renderedGridTemplateAreas[i][j]} `
             }
             console.log(s)
         }
         console.log('///////////////////////////')
-        return l
+        return renderedGridTemplateAreas
     }
 }

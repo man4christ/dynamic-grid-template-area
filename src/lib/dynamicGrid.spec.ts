@@ -1,5 +1,5 @@
 import { assert, describe, expect, it } from 'vitest'
-import { add } from './dynamicGrid'
+import { renderGridTemplateAreas } from './dynamicGrid'
 
 describe('suite name', () => {
     it('large grid vertical', () => {
@@ -102,7 +102,7 @@ describe('suite name', () => {
             }
         }
 
-        let l = add(root)
+        let l = renderGridTemplateAreas(root)
         let grid = ''
         for (let i = 0; i < l.length; i++) {
             let s = ''
@@ -221,7 +221,7 @@ describe('suite name', () => {
             }
         }
 
-        let l = add(root)
+        let l = renderGridTemplateAreas(root)
         let grid = ''
         for (let i = 0; i < l.length; i++) {
             let s = ''
