@@ -144,7 +144,7 @@ describe('suite name', () => {
   it('foo', () => {
     let root = {
       id: 'root',
-      split: 'v',
+      split: 'h',
       left: {
         split: 'h',
         left: {
