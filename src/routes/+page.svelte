@@ -6,12 +6,13 @@
 
 	let template = $state();
 
-	let root: any = $state({
+	let root: any = {
 		id: 'a',
 		split: undefined,
 		left: undefined,
-		right: undefined
-	});
+		right: undefined,
+		buffer: 'hi im root pane'
+	};
 
 	let elements = $state([]);
 	let deletedElements = $state({});
@@ -50,24 +51,6 @@
         grid-template-columns: repeat(${gta.length}, ${gta[0].length});
 		grid-template-areas:
 			${grid};`;
-	}
-
-	function flattenNodes(n: node): node[] {
-		let ln: node[] = [];
-		if (n.left) {
-			ln = flattenNodes(n.left);
-		}
-
-		let rn: node[] = [];
-		if (n.right) {
-			rn = flattenNodes(n.right);
-		}
-
-		if (n.left === undefined && n.right === undefined) {
-			return [n];
-		}
-
-		return ln.concat(rn);
 	}
 
 	function findNodes(n: node, key: string): node | undefined {
@@ -110,14 +93,17 @@
 			n.left = {
 				split: n.split,
 				left: {
-					id: n.id
+					id: n.id,
+                    buffer: n.buffer
 				},
 				right: {
-					id: nid
+					id: nid,
+                    buffer: 'hi i split ' + n.split
 				}
 			};
 			n.id = undefined;
 			n.split = split;
+			
 		} else {
 			n.split = split;
 
@@ -126,7 +112,8 @@
 			};
 
 			n.right = {
-				id: nid
+				id: nid,
+				buffer: 'hi i split ' + split
 			};
 			n.id = undefined;
 		}
@@ -187,18 +174,18 @@
 	onMount(() => {
 		onGridUpdate();
 	});
+
 	let hidden = $state(false);
 </script>
 
 <div class="flex h-[100vh] w-full flex-col">
-	{JSON.stringify(root)}
-	{JSON.stringify(deletedElements)}
 	<div style="min-width: 1px; {template}" class="h-[100%] w-full">
 		<!-- svelte-ignore a11y_click_events_have_key_events -->
 		{#each elements as a, idx}
 			<!-- svelte-ignore a11y_click_events_have_key_events -->
 			<!-- svelte-ignore a11y_no_static_element_interactions -->
 			{#if !deletedElements[a]}
+				{@const pane = findNodes(root, a)}
 				<div
 					style="grid-area: {a};"
 					class="header w-full items-center border border-neutral-200 bg-neutral-950 text-center {deletedElements[
@@ -209,6 +196,7 @@
 				>
 					<div class="flex h-full flex-col items-center justify-center text-neutral-200">
 						{a}
+						{pane?.buffer}
 						{new Date().getSeconds()}
 						<br />
 						<button
@@ -227,7 +215,6 @@
 						<button
 							class="bg-green-500 text-neutral-700"
 							onclick={() => {
-								console.log('root', root);
 								deletePane(root, a);
 							}}>Delete</button
 						>
@@ -239,13 +226,4 @@
 </div>
 
 <style>
-	.wrapper {
-		display: grid;
-		grid-template-columns: repeat(8, 16);
-		grid-template-areas:
-			'a a a a a a a a b b b b c c d d i i i i i i i i j j j j k k l l '
-			'a a a a a a a a e e e e e e e e i i i i i i i i m m m m m m m m '
-			'f f f f f f f f f f f f f f f f n n n n n n n n n n n n n n n n '
-			'g g g g g g g g h h h h h h h h o o o o o o o o p p p p p p p p ';
-	}
 </style>

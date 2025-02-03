@@ -3,6 +3,7 @@ export interface node {
     left: node | any;
     right: node | any;
     split: string;
+    buffer: any
 }
 
 export function numberToLetters(number: number) {

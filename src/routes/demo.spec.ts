@@ -74,11 +74,11 @@ function add2(l, r, split) {
 
   if (split === 'h') {
     if (rc == lc && rl == ll){
-      l.forEach(la => {
+      l.forEach((la: any) => {
         com.push(la)
         
       });
-      r.forEach(ra => {
+      r.forEach((ra: any) => {
         com.push(ra)
       });
 
