@@ -76,6 +76,79 @@ function joinVerticalGridTemplateAreas(
 }
 
 
+function joinHorizontalGridTemplateAreas(
+    gta: string[][],
+    lrgta: string[][],
+    rrgta: string[][]
+) {
+
+    let leftNumRows = lrgta.length
+    let rightNumRows = rrgta.length
+
+    let leftNumCols = lrgta[0].length
+    let rightNumCols = rrgta[0].length
+
+    /** if the columns length are equal stack the left pane on top of the right 
+     * the l repeat logic below would equal 1 and repeat an extra time if the 
+     * areas are equal. 
+     */
+    if (rightNumCols == leftNumCols ) {
+        lrgta.forEach(la => {
+            gta.push(la)
+
+        });
+        rrgta.forEach(ra => {
+            gta.push(ra)
+        });
+
+        return gta
+    }
+
+    /** ensure the left (top) and right (bottom) areas have equal col length. 
+     * if differ in columns repeat an all indexes in a row n number of 
+     * times to ensure row length is equal
+     * 
+     * e.g. if a left (top) is 1, 2 and the right (bottom) is 3, 3, 4, 5
+     * the result should be
+     * 
+     * 1, 1, 2, 2 
+     * 3, 3, 4, 5
+     * 
+     * lrepeat = (4 * 2) / 2 = 2 
+     * each index is repeated twice to get 1, 1, 2, 2
+    */
+    let lRepeatRows = []
+    let lrepeat = (rightNumCols * leftNumCols) / leftNumCols;
+    for (let i = 0; i < leftNumRows; i++) {
+        let repeatRow = []
+        for (let j = 0; j < leftNumCols; j++) {
+            for (let k = 0; k < lrepeat; k++) {
+                repeatRow.push(lrgta[i][j])
+            }
+        }
+        lRepeatRows.push(repeatRow)
+    }
+
+    let rRepeatRows = []
+    let rrepeat = (leftNumCols * rightNumCols) / rightNumCols;
+    for (let i = 0; i < rightNumRows; i++) {
+        let repeatRow = []
+        for (let j = 0; j < rightNumCols; j++) {
+            for (let k = 0; k < rrepeat; k++) {
+                repeatRow.push(rrgta[i][j])
+            }
+        }
+        rRepeatRows.push(repeatRow)
+    }
+
+    for (let j = 0; j < lRepeatRows.length; j++) {
+        gta.push(lRepeatRows[j])
+    }
+    for (let j = 0; j < rRepeatRows.length; j++) {
+        gta.push(rRepeatRows[j])
+    }
+}
+
 /**
  * 
  * @param lrgta left grid template area that is rendered.
@@ -84,60 +157,14 @@ function joinVerticalGridTemplateAreas(
  * @returns returns the joined grid template areas. updating the areas as needed e.g. filling in the grid as necessary.
  */
 function joinGridTemplateAreas(lrgta: string[][], rrgta: string[][], split: string) {
-    let leftNumRows = lrgta.length
-    let rightNumRows = rrgta.length
-
-    let leftNumCols = lrgta[0].length
-    let rightNumCols = rrgta[0].length
-
     let gta: string[][] = [];
+
     if (split === 'v') {
         joinVerticalGridTemplateAreas(gta, lrgta, rrgta)
     }
 
     if (split === 'h') {
-        if (rightNumCols == leftNumCols && rightNumRows == leftNumRows) {
-            lrgta.forEach(la => {
-                gta.push(la)
-
-            });
-            rrgta.forEach(ra => {
-                gta.push(ra)
-            });
-
-            return gta
-        }
-
-        let lRepeatRows = []
-        let lrepeat = (rightNumCols * leftNumCols) / leftNumCols;
-        for (let i = 0; i < leftNumRows; i++) {
-            let repeatRow = []
-            for (let j = 0; j < leftNumCols; j++) {
-                for (let k = 0; k < lrepeat; k++) {
-                    repeatRow.push(lrgta[i][j])
-                }
-            }
-            lRepeatRows.push(repeatRow)
-        }
-
-        let rRepeatRows = []
-        let rrepeat = (leftNumCols * rightNumCols) / rightNumCols;
-        for (let i = 0; i < rightNumRows; i++) {
-            let repeatRow = []
-            for (let j = 0; j < rightNumCols; j++) {
-                for (let k = 0; k < rrepeat; k++) {
-                    repeatRow.push(rrgta[i][j])
-                }
-            }
-            rRepeatRows.push(repeatRow)
-        }
-
-        for (let j = 0; j < lRepeatRows.length; j++) {
-            gta.push(lRepeatRows[j])
-        }
-        for (let j = 0; j < rRepeatRows.length; j++) {
-            gta.push(rRepeatRows[j])
-        }
+        joinHorizontalGridTemplateAreas(gta, lrgta, rrgta)
     }
 
     return gta;
