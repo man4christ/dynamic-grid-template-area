@@ -6,12 +6,12 @@
 
 	let template = $state();
 
-	let root: any = $state({
+	let root: any = {
 		id: 'root',
 		split: undefined,
 		left: undefined,
 		right: undefined
-	});
+	};
 
 	let elements = $state([]);
 
@@ -35,7 +35,7 @@
 			return a.charCodeAt(0) - b.charCodeAt(0);
 		});
 
-        console.log(elements)
+		console.log(elements);
 
 		template = `display: grid;
         grid-template-columns: repeat(${gta.length}, ${gta[0].length});
@@ -71,11 +71,15 @@
 			found = findNodes(n.left, key);
 		}
 
+        if (found){
+            return found
+        }
+        
 		if (n.right) {
 			found = findNodes(n.right, key);
 		}
 
-        return found
+		return found;
 	}
 
 	function splitVertical(paneId: string) {
@@ -83,6 +87,8 @@
 
 		/**n should never be undefined */
 		if (!n) {
+            console.log('did not find ' , paneId, root)
+
 			return;
 		}
 
@@ -95,15 +101,29 @@
 			nid = String.fromCharCode(lid.charCodeAt(0) + 1);
 		}
 
-		n.split = 'v';
-		n.left = {
-			id: n.id
-		};
+		if (n.left && n.right) {
+			n.left = {
+				split: n.split,
+				left: {
+					id: n.id
+				},
+				right: {
+					id: nid
+				}
+			};
 
-		n.right = {
-			id: nid
-		};
+			n.split = 'v';
+		} else {
+			n.split = 'v';
+			n.left = {
+				id: n.id
+			};
 
+			n.right = {
+				id: nid
+			};
+		}
+		console.log('node', n, root);
 		onGridUpdate();
 	}
 
@@ -128,15 +148,18 @@
 			<!-- svelte-ignore a11y_click_events_have_key_events -->
 			<!-- svelte-ignore a11y_no_static_element_interactions -->
 			<div
-				onclick={() => {
-					toggle;
-				}}
 				style="grid-area: {a};"
 				class="header w-full items-center border border-neutral-200 bg-neutral-950 text-center"
 			>
 				<div class="flex h-full items-center justify-center text-neutral-200">
 					{a}
 					{new Date().getSeconds()}
+					<br />
+					<button
+						onclick={() => {
+							splitVertical(a);
+						}}>Vertical Split</button
+					>
 				</div>
 			</div>
 		{/each}
