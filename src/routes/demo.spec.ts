@@ -25,41 +25,49 @@ function add2(l, r, split) {
   let com = [];
   if (split === 'v') {
     let lrepeat = rc % lc === 0 ? rc / lc : (rc * lc) / (lc);
-
+    let llrepeat = rl % ll === 0 ? rl / ll : (rl * ll) / (l);
     let lRepeatRow = []
     for (let i = 0; i < ll; i++) {
-      let repeatCol = []
-      for (let j = 0; j < lc; j++) {
-        for (let k = 0; k < lrepeat; k++) {
-          repeatCol.push(l[i][j])
-        }
+      for (let m = 0; m < llrepeat; m++) {
+        let repeatCol = []
+        for (let j = 0; j < lc; j++) {
+          for (let k = 0; k < lrepeat; k++) {
+            repeatCol.push(l[i][j])
+          }
 
+        }
+        lRepeatRow.push(repeatCol)
       }
-      lRepeatRow.push(repeatCol)
     }
 
     let rRepeatRow = []
-    let rrepeat = lc % rc === 0 ? lc / rc : (lc * rc) / (rc);;
+    let rrepeat = lc % rc === 0 ? lc / rc : (lc * rc) / (rc);
+    let rrrepeat = ll % rl === 0 ? ll / rl : (ll * rl) / (rl);
 
     for (let i = 0; i < rl; i++) {
-      let repeatCol = []
+      for (let m = 0; m < rrrepeat; m++) {
+        let repeatCol = []
 
-      for (let j = 0; j < rc; j++) {
-        for (let k = 0; k < rrepeat; k++) {
-          repeatCol.push(r[i][j])
+        for (let j = 0; j < rc; j++) {
+          for (let k = 0; k < rrepeat; k++) {
+            repeatCol.push(r[i][j])
+          }
+
         }
-
+        rRepeatRow.push(repeatCol)
       }
-      rRepeatRow.push(repeatCol)
     }
 
 
     for (let i = 0; i < rRepeatRow.length; i++) {
       let row = []
-      
-      for (let j = 0; j < lRepeatRow[0].length; j++) {
-        row.push(lRepeatRow[0][j])
+
+
+      for (let j = 0; j < lRepeatRow[i].length; j++) {
+        row.push(lRepeatRow[i][j])
       }
+
+
       for (let j = 0; j < rRepeatRow[i].length; j++) {
         row.push(rRepeatRow[i][j])
       }
@@ -129,58 +137,108 @@ describe('suite name', () => {
   it('foo', () => {
     let root = {
       id: 'root',
-      split: 'h',
+      split: 'v',
       left: {
-        split: 'v',
+        split: 'h',
         left: {
-          id: '1',
+          split: 'v',
+          left: {
+            id: 'a',
+          },
+          right: {
+            split: 'h',
+            left: {
+              split: 'v',
+              left: {
+                id: 'b'
+              },
+              right: {
+                split: 'v',
+                left: {
+                  id: 'c'
+                },
+                right: {
+                  id: 'd'
+                },
+
+              }
+
+            },
+            right: {
+              id: 'e'
+            }
+          },
         },
         right: {
           split: 'h',
           left: {
-            split: 'v',
-            left: {
-              id: '4'
-            },
-            right: {
-              split: 'v',
-              left: {
-                id: '7'
-              },
-              right: {
-                id: '8'
-              },
-
-            }
-
+            id: 'f'
           },
           right: {
-            id: '6'
-          }
+            split: 'v',
+            left: {
+              id: 'g',
+            },
+            right: {
+              id: 'h',
+            },
+          },
         },
       },
       right: {
         split: 'h',
         left: {
-          id: '2'
-        },
-        right: {
           split: 'v',
           left: {
-            id: '3',
+            id: 'i',
           },
           right: {
-            id: '5',
+            split: 'h',
+            left: {
+              split: 'v',
+              left: {
+                id: 'j'
+              },
+              right: {
+                split: 'v',
+                left: {
+                  id: 'k'
+                },
+                right: {
+                  id: 'l'
+                },
+
+              }
+
+            },
+            right: {
+              id: 'm'
+            }
           },
         },
-      },
+        right: {
+          split: 'h',
+          left: {
+            id: 'n'
+          },
+          right: {
+            split: 'v',
+            left: {
+              id: 'o',
+            },
+            right: {
+              id: 'p',
+            },
+          },
+        },
+      }
     }
 
     let l = add(root)
     for (let i = 0; i < l.length; i++) {
       let s = ''
       for (let j = 0; j < l[i].length; j++) {
-        s += `${l[i][j]} `
+        s += `${l[i][j]},`
       }
       console.log(s)
     }
