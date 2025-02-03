@@ -1,21 +1,23 @@
 <script lang="ts">
-	import { renderGridTemplateAreas } from '$lib/dynamicGrid';
+	import { renderGridTemplateAreas, type node } from '$lib/dynamicGrid';
 	import { onMount } from 'svelte';
 
 	let toggle = $state(true);
 
 	let template = $state();
-	let template2 = $state();
 
-	let root = $state({
+	let root: any = $state({
 		id: 'root',
-        split: undefined
+		split: undefined,
+		left: undefined,
+		right: undefined
 	});
 
 	let elements = $state([]);
+
 	function onGridUpdate() {
 		let gta = renderGridTemplateAreas(root);
-        console.log(gta)
+		console.log(gta);
 
 		let els = {};
 		let grid = '';
@@ -39,31 +41,94 @@
 			${grid};`;
 	}
 
+	function flattenNodes(n: node): node[] {
+		let ln: node[] = [];
+		if (n.left) {
+			ln = flattenNodes(n.left);
+		}
 
+		let rn: node[] = [];
+		if (n.right) {
+			rn = flattenNodes(n.right);
+		}
 
-    function splitVertical(paneId: string) {
+		if (n.left === undefined && n.right === undefined) {
+			return [n];
+		}
 
-    }
+		return ln.concat(rn);
+	}
+
+	function findNodes(n: node, key: string): node | undefined {
+		if (n.id === key) {
+			return n;
+		}
+		let found;
+
+		if (n.left) {
+			found = flattenNodes(n.left);
+		}
+
+		if (n.right) {
+			found = flattenNodes(n.right);n
+		}
+
+        return found
+	}
+
+	function splitVertical(paneId: string) {
+		let n = findNodes(root, paneId);
+
+		/**n should never be undefined */
+		if (!n) {
+			return;
+		}
+
+		let lid: string = elements[elements.length - 1];
+		let nid = '';
+		// TODO fix this. will need to update tests
+		if (nid === 'root') {
+			nid = 'a';
+		} else {
+			nid = String.fromCharCode(nid.charCodeAt(0) + 1);
+		}
+
+		n.split = 'v';
+		n.left = {
+			id: n.id
+		};
+
+		n.right = {
+			id: nid
+		};
+
+		onGridUpdate();
+	}
 
 	onMount(() => {
 		onGridUpdate();
 	});
-    let hidden = $state(false)
+	let hidden = $state(false);
 </script>
 
 <div class="flex h-[100vh] w-full flex-col">
 	<button
 		onclick={() => {
-            hidden = !hidden
+			splitVertical('root');
 			toggle = !toggle;
-
 		}}
 	>
 		Toggle</button
 	>
-	<div style="min-width: 1px; { template }" class="h-[100%] w-full">
+	<div style="min-width: 1px; {template}" class="h-[100%] w-full">
+		<!-- svelte-ignore a11y_click_events_have_key_events -->
 		{#each elements as a, idx}
+			<!-- svelte-ignore a11y_click_events_have_key_events -->
+			<!-- svelte-ignore a11y_no_static_element_interactions -->
 			<div
+				onclick={() => {
+					toggle;
+				}}
 				style="grid-area: {a};"
 				class="header w-full items-center border border-neutral-200 bg-neutral-950 text-center"
 			>
@@ -73,7 +138,6 @@
 				</div>
 			</div>
 		{/each}
-        <div style="grid-area: 0;" class='{hidden ? 'hidden': ''}'>hello</div>
 	</div>
 </div>
 

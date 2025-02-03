@@ -1,15 +1,9 @@
-interface node {
+export interface node {
     id: string;
     left: node | any;
     right: node | any;
     split: string;
 }
-
-interface rootNode {
-    left: node;
-    right: node;
-}
-
 
 /** renders vertical grid template areas
  * 
