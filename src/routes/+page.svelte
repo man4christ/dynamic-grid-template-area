@@ -1,24 +1,20 @@
 <script lang="ts">
 	import { numberToLetters, renderGridTemplateAreas, type node } from '$lib/dynamicGrid';
 	import { onMount } from 'svelte';
+	import Component from './component.svelte';
+	import { paneService } from '$lib/pane.service.svelte';
 
 	let toggle = $state(true);
 
 	let template = $state();
 
-	let root: any = {
-		id: 'a',
-		split: undefined,
-		left: undefined,
-		right: undefined,
-		buffer: 'hi im root pane'
-	};
+	
 
 	let elements = $state([]);
 	let deletedElements = $state({});
 
 	function onGridUpdate() {
-		let gta = renderGridTemplateAreas(root);
+		let gta = renderGridTemplateAreas(paneService.rootPane);
 
 		let els = {};
 		let grid = '';
@@ -75,7 +71,7 @@
 	}
 
 	function splitPane(paneId: string, split: string) {
-		let n = findNodes(root, paneId);
+		let n = findNodes(paneService.rootPane, paneId);
 
 		/**n should never be undefined */
 		if (!n) {
@@ -94,16 +90,15 @@
 				split: n.split,
 				left: {
 					id: n.id,
-                    buffer: n.buffer
+					buffer: n.buffer
 				},
 				right: {
 					id: nid,
-                    buffer: 'hi i split ' + n.split
+					buffer: Component
 				}
 			};
 			n.id = undefined;
 			n.split = split;
-			
 		} else {
 			n.split = split;
 
@@ -113,7 +108,7 @@
 
 			n.right = {
 				id: nid,
-				buffer: 'hi i split ' + split
+				buffer: Component
 			};
 			n.id = undefined;
 		}
@@ -121,6 +116,7 @@
 	}
 
 	function deletePane(n: node, key: string) {
+        
 		if (n.id === key) {
 			return n;
 		}
@@ -172,6 +168,9 @@
 	}
 
 	onMount(() => {
+		paneService.rootPane.buffer = Component;
+		paneService.onDeletePane = deletePane;
+		paneService.onSplitPane = splitPane;
 		onGridUpdate();
 	});
 
@@ -186,39 +185,12 @@
 			<!-- svelte-ignore a11y_no_static_element_interactions -->
 			{#if !deletedElements[a]}
 				{@const pane = findNodes(root, a)}
+				{@const Component = pane?.buffer}
 				<div
 					style="grid-area: {a};"
-					class="header w-full items-center border border-neutral-200 bg-neutral-950 text-center {deletedElements[
-						a
-					]
-						? 'hidden'
-						: ''}"
+					class="header w-full items-center border border-neutral-200 bg-neutral-950 text-center"
 				>
-					<div class="flex h-full flex-col items-center justify-center text-neutral-200">
-						{a}
-						{pane?.buffer}
-						{new Date().getSeconds()}
-						<br />
-						<button
-							class="bg-green-500 text-neutral-700"
-							onclick={() => {
-								splitPane(a, 'v');
-							}}>Vertical Split</button
-						>
-						<button
-							class="bg-green-500 text-neutral-700"
-							onclick={() => {
-								splitPane(a, 'h');
-							}}>Horizontal</button
-						>
-
-						<button
-							class="bg-green-500 text-neutral-700"
-							onclick={() => {
-								deletePane(root, a);
-							}}>Delete</button
-						>
-					</div>
+					<Component paneId={a}></Component>
 				</div>
 			{/if}
 		{/each}
